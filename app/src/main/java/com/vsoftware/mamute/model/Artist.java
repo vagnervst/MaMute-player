@@ -36,7 +36,7 @@ public class Artist {
         String order = MediaStore.Audio.Media.ARTIST; //order by artist name
 
         String[] projection = { //capture artist id and artist name, not repeating them
-                "DISTINCT " + MediaStore.Audio.Media.ARTIST_ID + " as _id, " + MediaStore.Audio.Media.ARTIST
+                "DISTINCT " + MediaStore.Audio.Media.ARTIST_ID + ", " + MediaStore.Audio.Media.ARTIST
         };
 
         Cursor cursor = cr.query(uri, projection, selection, null, order);
@@ -49,6 +49,10 @@ public class Artist {
             for( int i = 0; i < cursor.getCount(); ++i ) {
                 int artist_id = cursor.getInt( cursor.getColumnIndex( MediaStore.Audio.Media.ARTIST_ID ) );
                 String artist_name = cursor.getString( cursor.getColumnIndex( MediaStore.Audio.Media.ARTIST ) );
+
+                Artist artist = new Artist(artist_id, artist_name);
+
+                foundArtists.add(artist);
 
                 cursor.moveToNext();
             }
@@ -75,7 +79,7 @@ public class Artist {
         Artist artistFound = null;
         if( cursor != null && cursor.getCount() == 1 ) { //the artist was found
             cursor.moveToFirst();
-            
+
             int artist_id = cursor.getInt( cursor.getColumnIndex( MediaStore.Audio.Media.ARTIST_ID ) );
             String artist_name = cursor.getString( cursor.getColumnIndex( MediaStore.Audio.Media.ARTIST ) );
 
@@ -83,5 +87,17 @@ public class Artist {
         }
 
         return artistFound;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<Album> getAlbums() {
+        return albums;
     }
 }
