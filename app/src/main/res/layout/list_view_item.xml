@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="60dp">
+    android:layout_height="60dp"
+    android:minHeight="60dp">
 
     <ImageView android:id="@+id/artist_image"
         android:layout_width="65dp"
@@ -12,7 +13,7 @@
     <TextView android:id="@+id/info_label"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textSize="30sp"
+        android:textSize="18sp"
         android:gravity="center_vertical"/>
 
 </LinearLayout>

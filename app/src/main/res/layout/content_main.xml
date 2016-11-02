@@ -4,10 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.vsoftware.mamute.MainActivity"
     tools:showIn="@layout/activity_main"
@@ -16,30 +12,45 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@color/colorPrimary">
 
         <Button android:id="@+id/btn_artists"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:layout_weight="1"
+            android:textColor="@android:color/white"
             android:text="Artistas"
-            android:onClick="selectArtists"/>
+            android:onClick="selectArtists"
+            style="?attr/borderlessButtonStyle" />
 
         <Button
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:layout_weight="1"
-            android:text="Albums"/>
+            android:text="Albums"
+            android:textColor="@android:color/white"
+            style="?attr/borderlessButtonStyle" />
 
         <Button
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:layout_weight="1"
-            android:text="Músicas"/>
+            android:text="Músicas"
+            android:textColor="@android:color/white"
+            style="?attr/borderlessButtonStyle" />
 
     </LinearLayout>
 
-    <ListView android:id="@+id/lv_data"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin">
+
+        <ListView android:id="@+id/lv_data"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
 </LinearLayout>
