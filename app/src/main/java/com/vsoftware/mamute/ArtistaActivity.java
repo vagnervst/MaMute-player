@@ -50,7 +50,9 @@ public class ArtistaActivity extends AppCompatActivity {
     public void selectAlbums(View view) {
         List<Album> albums = Album.findByArtistName(context, selectedArtist.getName());
 
-        AlbumAdapter adapter = new AlbumAdapter(context, R.layout.list_view_item, albums);
-        lv_artistdata.setAdapter(adapter);
+        if( albums != null ) {
+            AlbumAdapter adapter = new AlbumAdapter(context, R.layout.list_view_item, albums);
+            lv_artistdata.setAdapter(adapter);
+        }
     }
 }
