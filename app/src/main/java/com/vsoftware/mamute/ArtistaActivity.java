@@ -11,6 +11,8 @@ import android.widget.ListView;
 import com.vsoftware.mamute.model.Album;
 import com.vsoftware.mamute.model.AlbumAdapter;
 import com.vsoftware.mamute.model.Artist;
+import com.vsoftware.mamute.model.Song;
+import com.vsoftware.mamute.model.SongAdapter;
 
 import java.util.List;
 
@@ -39,7 +41,10 @@ public class ArtistaActivity extends AppCompatActivity {
     }
 
     public void selectSongs(View view) {
+        List<Song> songs = Song.findByArtistId(context, selectedArtist.getId());
 
+        SongAdapter adapter = new SongAdapter(context, R.layout.list_view_item, songs);
+        lv_artistdata.setAdapter(adapter);
     }
 
     public void selectAlbums(View view) {

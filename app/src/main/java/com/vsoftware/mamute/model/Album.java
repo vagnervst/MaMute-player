@@ -7,6 +7,7 @@ import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.provider.MediaStore;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,10 +18,12 @@ public class Album {
     private int id;
     private String title;
     private List<Song> songs;
+    private Uri thumb;
 
-    public Album(int id, String title) {
+    public Album(int id, String title, Uri thumb) {
         this.setId(id);
         this.setTitle(title);
+        this.thumb = thumb;
     }
 
     public static List<Album> findAll(Context context) {
@@ -45,7 +48,7 @@ public class Album {
                 int album_id = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Albums._ID));
                 String album_title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM));
 
-                Album albumobj = new Album(album_id, album_title);
+                Album albumobj = new Album(album_id, album_title, null);
 
                 albumsFound.add(albumobj);
 
@@ -65,7 +68,7 @@ public class Album {
         String order = MediaStore.Audio.Albums.ALBUM;
 
         String[] projection = {
-                MediaStore.Audio.Albums._ID + ", " + MediaStore.Audio.Albums.ALBUM
+                MediaStore.Audio.Albums._ID + ", " + MediaStore.Audio.Albums.ALBUM + ", " + MediaStore.Audio.Albums.ALBUM_ART
         };
 
         Cursor cursor = cr.query(uri, projection, selection, null, order);
@@ -79,8 +82,10 @@ public class Album {
             for (int i = 0; i < cursor.getCount(); ++i) {
                 int album_id = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Albums._ID));
                 String album_title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM));
+                String art_path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
+                Uri album_art = Uri.fromFile(new File( art_path ));
 
-                Album albumobj = new Album(album_id, album_title);
+                Album albumobj = new Album(album_id, album_title, album_art);
 
                 albumsFound.add(albumobj);
 
@@ -115,5 +120,13 @@ public class Album {
 
     public void setSongs(List<Song> songs) {
         this.songs = songs;
+    }
+
+    public Uri getThumb() {
+        return thumb;
+    }
+
+    public void setThumb(Uri thumb) {
+        this.thumb = thumb;
     }
 }

@@ -64,7 +64,7 @@ public class Artist {
     public static Artist findById(Context context, int id) {
         ContentResolver cr = context.getContentResolver();
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI; //get data from external storage
-        String selection = MediaStore.Audio.Media.IS_MUSIC + " != 0 AND " + MediaStore.Audio.Media.ARTIST_ID  + " = ?"; //search for audio files only
+        String selection = MediaStore.Audio.Media.IS_MUSIC + " != 0 AND " + MediaStore.Audio.Media.ARTIST_ID  + " = ?"; //search for artist id
 
         String[] projection = {
                 "DISTINCT " + MediaStore.Audio.Media.ARTIST_ID + ", " + MediaStore.Audio.Media.ARTIST

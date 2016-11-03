@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.vsoftware.mamute.R;
@@ -13,12 +12,12 @@ import com.vsoftware.mamute.R;
 import java.util.List;
 
 /**
- * Created by Vagner on 02/11/2016.
+ * Created by Vagner on 03/11/2016.
  */
-public class AlbumAdapter extends ArrayAdapter<Album> {
+public class SongAdapter extends ArrayAdapter<Song> {
     private int resource;
 
-    public AlbumAdapter(Context context, int resource, List<Album> objects) {
+    public SongAdapter(Context context, int resource, List<Song> objects) {
         super(context, resource, objects);
         this.resource = resource;
     }
@@ -31,16 +30,10 @@ public class AlbumAdapter extends ArrayAdapter<Album> {
             v = inflater.inflate(this.resource, null);
         }
 
-        Album album = getItem(position);
-
-        ImageView thumbnail = (ImageView) v.findViewById(R.id.artist_image);
-
-        if( album.getThumb() != null ) {
-            thumbnail.setImageURI(album.getThumb());
-        }
+        Song song = getItem(position);
 
         TextView label = (TextView) v.findViewById(R.id.info_label);
-        label.setText( album.getTitle() );
+        label.setText( song.getTitle() );
 
         return v;
     }
