@@ -15,7 +15,6 @@ import java.util.List;
 public class Artist {
     private int id;
     private String name;
-    private List<Album> albums;
 
     public Artist() {
 
@@ -56,6 +55,7 @@ public class Artist {
 
                 cursor.moveToNext();
             }
+            cursor.close();
         }
 
         return foundArtists;
@@ -64,17 +64,13 @@ public class Artist {
     public static Artist findById(Context context, int id) {
         ContentResolver cr = context.getContentResolver();
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI; //get data from external storage
-        String selection = MediaStore.Audio.Media.IS_MUSIC + "!= 0"; //search for audio files only
+        String selection = MediaStore.Audio.Media.IS_MUSIC + " != 0 AND " + MediaStore.Audio.Media.ARTIST_ID  + " = ?"; //search for audio files only
 
         String[] projection = {
-                "DISTINCT " + MediaStore.Audio.Media.ARTIST_ID + " as _id, " + MediaStore.Audio.Media.ARTIST
+                "DISTINCT " + MediaStore.Audio.Media.ARTIST_ID + ", " + MediaStore.Audio.Media.ARTIST
         };
 
-        String where[] = {
-                "_id = " + String.valueOf(id)
-        }; //where clause bound to id
-
-        Cursor cursor = cr.query(uri, projection, selection, where, null);
+        Cursor cursor = cr.query(uri, projection, selection, new String[] { String.valueOf(id) }, null);
 
         Artist artistFound = null;
         if( cursor != null && cursor.getCount() == 1 ) { //the artist was found
@@ -84,6 +80,8 @@ public class Artist {
             String artist_name = cursor.getString( cursor.getColumnIndex( MediaStore.Audio.Media.ARTIST ) );
 
             artistFound = new Artist(artist_id, artist_name);
+
+            cursor.close();
         }
 
         return artistFound;
@@ -95,9 +93,5 @@ public class Artist {
 
     public String getName() {
         return name;
-    }
-
-    public List<Album> getAlbums() {
-        return albums;
     }
 }

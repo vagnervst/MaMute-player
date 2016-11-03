@@ -2,6 +2,7 @@ package com.vsoftware.mamute;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -9,6 +10,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         btn_artists = (Button) findViewById(R.id.btn_artists);
 
         askPermission();
+        lv_data.setOnItemClickListener( new ListViewItemClick() );
     }
 
     public void selectArtists(View view) {
@@ -53,6 +56,19 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this,
                     new String[] { Manifest.permission.READ_EXTERNAL_STORAGE },
                     READ_STORAGE_REQUEST);
+        }
+    }
+
+    private class ListViewItemClick implements AdapterView.OnItemClickListener {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Intent artistWin = new Intent(context, ArtistaActivity.class);
+            Artist selectedArtist = (Artist) lv_data.getItemAtPosition(position);
+
+            artistWin.putExtra("artistId", selectedArtist.getId());
+
+            startActivity(artistWin);
         }
     }
 }
