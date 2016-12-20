@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -13,9 +14,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.vsoftware.mamute.model.Album;
+import com.vsoftware.mamute.model.AlbumAdapter;
 import com.vsoftware.mamute.model.Artist;
 import com.vsoftware.mamute.model.ArtistAdapter;
+import com.vsoftware.mamute.model.Song;
+import com.vsoftware.mamute.model.SongAdapter;
 
 import java.util.List;
 
@@ -25,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
     Context context;
     ListView lv_data;
-    Button btn_artists;
+    Button btn_artists, btn_albums, btn_songs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,14 +43,36 @@ public class MainActivity extends AppCompatActivity {
         context = this;
         lv_data = (ListView) findViewById(R.id.lv_data);
         btn_artists = (Button) findViewById(R.id.btn_artists);
+        btn_albums = (Button) findViewById(R.id.btn_albums);
+        btn_songs = (Button) findViewById(R.id.btn_songs);
 
         askPermission();
-        lv_data.setOnItemClickListener( new ListViewItemClick() );
     }
 
     public void selectArtists(View view) {
+        //Fill the listview with all artists stored on the device
         List<Artist> artists = Artist.findAll(context);
         ArtistAdapter adapter = new ArtistAdapter(context, R.layout.list_view_item, artists);
+
+        lv_data.setAdapter(adapter);
+        lv_data.setOnItemClickListener( new OpenArtist() );
+    }
+
+    public void selectAlbums(View view) {
+        //Fill the listview with all albums stored on the device
+
+        List<Album> albums = Album.findAll(context);
+        AlbumAdapter adapter = new AlbumAdapter(context, R.layout.list_view_item, albums);
+
+        lv_data.setAdapter(adapter);
+        lv_data.setOnItemClickListener( new OpenAlbum() );
+    }
+
+    public void selectSongs(View view) {
+        //Fill the listview with all songs stored on the device
+
+        List<Song> songs = Song.findAll(context);
+        SongAdapter adapter = new SongAdapter(context, R.layout.list_view_item, songs);
 
         lv_data.setAdapter(adapter);
     }
@@ -59,7 +87,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private class ListViewItemClick implements AdapterView.OnItemClickListener {
+    private class OpenArtist implements AdapterView.OnItemClickListener {
+        //ListView item click handler which opens artist's details activity
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -69,6 +98,19 @@ public class MainActivity extends AppCompatActivity {
             artistWin.putExtra("artistId", selectedArtist.getId());
 
             startActivity(artistWin);
+        }
+    }
+
+    private class OpenAlbum implements AdapterView.OnItemClickListener {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Intent albumWin = new Intent(context, AlbumActivity.class);
+            Album selectedAlbum = (Album) lv_data.getItemAtPosition(position);
+
+            albumWin.putExtra("albumId", selectedAlbum.getId());
+
+            startActivity(albumWin);
         }
     }
 }

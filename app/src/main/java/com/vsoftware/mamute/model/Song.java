@@ -103,6 +103,47 @@ public class Song {
         return songsFound;
     }
 
+    public static List<Song> findByAlbumId(Context context, int albumId) {
+        ContentResolver cr = context.getContentResolver();
+        Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        String selection = MediaStore.Audio.Media.IS_MUSIC + " != 0 " + MediaStore.Audio.Media.ALBUM_ID + " = ?";
+        String order = MediaStore.Audio.Media.TITLE;
+
+        String[] projection = {
+                MediaStore.Audio.Media._ID, MediaStore.Audio.Media.TITLE,
+                MediaStore.Audio.Media.ARTIST_ID, MediaStore.Audio.Media.ALBUM_ID
+        };
+
+        Cursor cursor = cr.query(uri,
+                projection,
+                selection,
+                new String[] { String.valueOf(albumId) },
+                order
+        );
+
+        List<Song> songs = new ArrayList<>();
+        if( cursor != null && cursor.getCount() > 0 ) {
+            cursor.moveToFirst();
+
+            for( int i = 0; i < cursor.getCount(); ++i ) {
+                int song_id = cursor.getInt( cursor.getColumnIndex( MediaStore.Audio.Media._ID ) );
+                String song_title = cursor.getString( cursor.getColumnIndex( MediaStore.Audio.Media.TITLE ) );
+                Uri song_uri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, song_id);
+                int artist_id = cursor.getInt( cursor.getColumnIndex( MediaStore.Audio.Media.ARTIST_ID ) );
+                int album_Id = cursor.getInt( cursor.getColumnIndex( MediaStore.Audio.Media.ALBUM_ID ) );
+
+                Song s = new Song(song_id, song_title, song_uri, artist_id, album_Id);
+
+                songs.add(s);
+                cursor.moveToNext();
+            }
+
+            cursor.close();
+        }
+
+        return songs;
+    }
+
     public int getId() {
         return id;
     }

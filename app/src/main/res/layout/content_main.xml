@@ -24,20 +24,22 @@
             android:onClick="selectArtists"
             style="?attr/borderlessButtonStyle" />
 
-        <Button
+        <Button android:id="@+id/btn_albums"
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_weight="1"
             android:text="Albums"
             android:textColor="@android:color/white"
+            android:onClick="selectAlbums"
             style="?attr/borderlessButtonStyle" />
 
-        <Button
+        <Button android:id="@+id/btn_songs"
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_weight="1"
             android:text="Músicas"
             android:textColor="@android:color/white"
+            android:onClick="selectSongs"
             style="?attr/borderlessButtonStyle" />
 
     </LinearLayout>

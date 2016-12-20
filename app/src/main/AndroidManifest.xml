@@ -29,6 +29,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.vsoftware.mamute.MainActivity" />
         </activity>
+        <activity
+            android:name=".AlbumActivity"
+            android:label="@string/title_activity_album"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.vsoftware.mamute.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

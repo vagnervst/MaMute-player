@@ -1,6 +1,7 @@
 package com.vsoftware.mamute.model;
 
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
@@ -59,6 +60,39 @@ public class Album {
         }
 
         return albumsFound;
+    }
+
+    public static Album findById(Context context, int albumId) {
+        ContentResolver cr = context.getContentResolver();
+        Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        String selection = MediaStore.Audio.Albums.ALBUM_ID + " = ?";
+        String order = MediaStore.Audio.Albums.ALBUM;
+
+        String[] projection = {
+                MediaStore.Audio.Albums.ALBUM_ID, MediaStore.Audio.Albums.ALBUM
+        };
+
+        Cursor cursor = cr.query(uri,
+                projection,
+                selection,
+                new String[] { String.valueOf(albumId) },
+                order
+        );
+
+        Album album = null;
+        if( cursor != null && cursor.getCount() == 1 ) {
+            cursor.moveToFirst();
+
+            int album_id = cursor.getInt( cursor.getColumnIndex( MediaStore.Audio.Media.ALBUM_ID ) );
+            String album_title = cursor.getString( cursor.getColumnIndex( MediaStore.Audio.Media.TITLE ) );
+
+            album = new Album(album_id, album_title, null);
+            album.setSongs( Song.findByAlbumId(context, album_id) );
+
+            cursor.close();
+        }
+
+        return album;
     }
 
     public static List<Album> findByArtistName(Context context, String artistName) {
