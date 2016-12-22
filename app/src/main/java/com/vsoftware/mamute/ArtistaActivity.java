@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.vsoftware.mamute.model.Album;
@@ -53,6 +54,21 @@ public class ArtistaActivity extends AppCompatActivity {
         if( albums != null ) {
             AlbumAdapter adapter = new AlbumAdapter(context, R.layout.list_view_item, albums);
             lv_artistdata.setAdapter(adapter);
+        }
+
+        lv_artistdata.setOnItemClickListener(new OpenAlbum());
+    }
+
+    private class OpenAlbum implements AdapterView.OnItemClickListener {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Intent albumWin = new Intent(context, AlbumActivity.class);
+            Album selectedAlbum = (Album) lv_artistdata.getItemAtPosition(position);
+
+            albumWin.putExtra("albumId", selectedAlbum.getId());
+
+            startActivity(albumWin);
         }
     }
 }

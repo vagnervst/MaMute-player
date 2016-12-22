@@ -106,7 +106,7 @@ public class Song {
     public static List<Song> findByAlbumId(Context context, int albumId) {
         ContentResolver cr = context.getContentResolver();
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        String selection = MediaStore.Audio.Media.IS_MUSIC + " != 0 " + MediaStore.Audio.Media.ALBUM_ID + " = ?";
+        String selection = MediaStore.Audio.Media.IS_MUSIC + " != 0 AND " + MediaStore.Audio.Media.ALBUM_ID + " = ?";
         String order = MediaStore.Audio.Media.TITLE;
 
         String[] projection = {

@@ -20,6 +20,7 @@ import com.vsoftware.mamute.model.Album;
 import com.vsoftware.mamute.model.AlbumAdapter;
 import com.vsoftware.mamute.model.Artist;
 import com.vsoftware.mamute.model.ArtistAdapter;
+import com.vsoftware.mamute.model.Player;
 import com.vsoftware.mamute.model.Song;
 import com.vsoftware.mamute.model.SongAdapter;
 
@@ -75,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
         SongAdapter adapter = new SongAdapter(context, R.layout.list_view_item, songs);
 
         lv_data.setAdapter(adapter);
+        lv_data.setOnItemClickListener( new OpenSong() );
     }
 
     public void askPermission() {
@@ -111,6 +113,15 @@ public class MainActivity extends AppCompatActivity {
             albumWin.putExtra("albumId", selectedAlbum.getId());
 
             startActivity(albumWin);
+        }
+    }
+
+    private class OpenSong implements AdapterView.OnItemClickListener {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Song selectedSong = (Song) lv_data.getItemAtPosition(position);
+            Player.play(context, selectedSong.getUri());
         }
     }
 }

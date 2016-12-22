@@ -9,12 +9,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ListView;
 
+import com.vsoftware.mamute.model.Album;
+import com.vsoftware.mamute.model.SongAdapter;
+
 public class AlbumActivity extends AppCompatActivity {
 
     Context context;
     ListView lv_songs;
 
     int albumId;
+    Album selectedAlbum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +35,11 @@ public class AlbumActivity extends AppCompatActivity {
         albumId = getIntent().getIntExtra("albumId", 0);
 
         if( albumId != 0 ) {
+            selectedAlbum = Album.findById(context, albumId);
+            setTitle( selectedAlbum.getTitle() );
 
+            SongAdapter adapter = new SongAdapter(context, R.layout.list_view_item, selectedAlbum.getSongs());
+            lv_songs.setAdapter(adapter);
         }
     }
 

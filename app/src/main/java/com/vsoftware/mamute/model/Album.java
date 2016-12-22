@@ -34,7 +34,7 @@ public class Album {
         String order = MediaStore.Audio.Albums.ALBUM;
 
         String[] projection = {
-                MediaStore.Audio.Albums._ID + ", " + MediaStore.Audio.Albums.ALBUM
+                MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM, MediaStore.Audio.Albums.ALBUM_ART
         };
 
         Cursor cursor = cr.query(uri, projection, selection, null, order);
@@ -48,8 +48,14 @@ public class Album {
             for (int i = 0; i < cursor.getCount(); ++i) {
                 int album_id = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Albums._ID));
                 String album_title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM));
+                String album_art = cursor.getString( cursor.getColumnIndex( MediaStore.Audio.Albums.ALBUM_ART ) );
 
-                Album albumobj = new Album(album_id, album_title, null);
+                Uri art_uri = null;
+                if( album_art != null ) {
+                    art_uri = Uri.fromFile(new File(album_art));
+                }
+
+                Album albumobj = new Album(album_id, album_title, art_uri);
 
                 albumsFound.add(albumobj);
 
@@ -64,12 +70,12 @@ public class Album {
 
     public static Album findById(Context context, int albumId) {
         ContentResolver cr = context.getContentResolver();
-        Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        String selection = MediaStore.Audio.Albums.ALBUM_ID + " = ?";
+        Uri uri = MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI;
+        String selection = MediaStore.Audio.Albums.ALBUM.length() + " > 0 AND " + MediaStore.Audio.Albums._ID + " = ?";
         String order = MediaStore.Audio.Albums.ALBUM;
 
         String[] projection = {
-                MediaStore.Audio.Albums.ALBUM_ID, MediaStore.Audio.Albums.ALBUM
+                MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM, MediaStore.Audio.Albums.ALBUM_ART
         };
 
         Cursor cursor = cr.query(uri,
@@ -80,13 +86,19 @@ public class Album {
         );
 
         Album album = null;
-        if( cursor != null && cursor.getCount() == 1 ) {
+        if( cursor != null && cursor.getCount() > 0 ) {
             cursor.moveToFirst();
 
-            int album_id = cursor.getInt( cursor.getColumnIndex( MediaStore.Audio.Media.ALBUM_ID ) );
-            String album_title = cursor.getString( cursor.getColumnIndex( MediaStore.Audio.Media.TITLE ) );
+            int album_id = cursor.getInt( cursor.getColumnIndex( MediaStore.Audio.Albums._ID ) );
+            String album_title = cursor.getString( cursor.getColumnIndex( MediaStore.Audio.Albums.ALBUM ) );
+            String album_art = cursor.getString( cursor.getColumnIndex( MediaStore.Audio.Albums.ALBUM_ART ) );
 
-            album = new Album(album_id, album_title, null);
+            Uri art_uri = null;
+            if( album_art != null ) {
+                art_uri = Uri.fromFile(new File(album_art));
+            }
+
+            album = new Album(album_id, album_title, art_uri);
             album.setSongs( Song.findByAlbumId(context, album_id) );
 
             cursor.close();
