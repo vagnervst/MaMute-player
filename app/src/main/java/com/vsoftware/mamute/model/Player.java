@@ -11,9 +11,10 @@ import java.io.IOException;
  */
 
 public class Player {
-    public static MediaPlayer player = new MediaPlayer();
+    private static MediaPlayer player = new MediaPlayer();
+    private static Song current_song;
 
-    private static void prepare(Context context, Uri song_uri) {
+    private static void prepare(Context context) {
         try {
 
             if( player.isPlaying() ) {
@@ -21,15 +22,37 @@ public class Player {
                 player.reset();
             }
 
-            player.setDataSource(context, song_uri);
+            player.setDataSource(context, current_song.getUri());
             player.prepare();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static void play(Context context, Uri song_uri) {
-        prepare(context, song_uri);
+    public static boolean changeState() {
+        if( player.isPlaying() ) {
+            player.pause();
+            return false;
+        } else {
+            player.start();
+            return true;
+        }
+    }
+
+    public static void play(Context context) {
+        prepare(context);
         player.start();
+    }
+
+    public static void setSong(Song song) {
+        current_song = song;
+    }
+
+    public static Song getSong() {
+        return current_song;
+    }
+
+    public static MediaPlayer getPlayer() {
+        return player;
     }
 }
