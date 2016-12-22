@@ -12,6 +12,7 @@ import android.widget.ListView;
 import com.vsoftware.mamute.model.Album;
 import com.vsoftware.mamute.model.AlbumAdapter;
 import com.vsoftware.mamute.model.Artist;
+import com.vsoftware.mamute.model.Player;
 import com.vsoftware.mamute.model.Song;
 import com.vsoftware.mamute.model.SongAdapter;
 
@@ -46,6 +47,8 @@ public class ArtistaActivity extends AppCompatActivity {
 
         SongAdapter adapter = new SongAdapter(context, R.layout.list_view_item, songs);
         lv_artistdata.setAdapter(adapter);
+
+        lv_artistdata.setOnItemClickListener( new OpenSong() );
     }
 
     public void selectAlbums(View view) {
@@ -69,6 +72,16 @@ public class ArtistaActivity extends AppCompatActivity {
             albumWin.putExtra("albumId", selectedAlbum.getId());
 
             startActivity(albumWin);
+        }
+    }
+
+    private class OpenSong implements AdapterView.OnItemClickListener {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Song selectedSong = (Song) lv_artistdata.getItemAtPosition(position);
+            Player.setSong( selectedSong );
+            Player.play(context);
         }
     }
 }

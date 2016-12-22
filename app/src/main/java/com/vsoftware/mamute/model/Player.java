@@ -16,11 +16,8 @@ public class Player {
 
     private static void prepare(Context context) {
         try {
-
-            if( player.isPlaying() ) {
-                player.stop();
-                player.reset();
-            }
+            player.stop();
+            player.reset();
 
             player.setDataSource(context, current_song.getUri());
             player.prepare();
