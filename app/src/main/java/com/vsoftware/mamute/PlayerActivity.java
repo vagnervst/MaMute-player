@@ -1,8 +1,6 @@
 package com.vsoftware.mamute;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -18,7 +16,6 @@ import com.vsoftware.mamute.model.Album;
 import com.vsoftware.mamute.model.Artist;
 import com.vsoftware.mamute.model.Player;
 
-import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -75,9 +72,27 @@ public class PlayerActivity extends AppCompatActivity {
                 double song_progress = (double) Player.getPlayer().getCurrentPosition() / Player.getPlayer().getDuration();
                 progress.setProgress((int) (song_progress*100));
             }
-        }, 0, 1000);
+        }, 0, 500);
 
-        long time = Player.getPlayer().getTimestamp().getAnchorMediaTimeUs();
+        progress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                int song_percentage = progress.getProgress();
+                int song_duration = Player.getPlayer().getDuration();
+                int song_position = (song_duration / 100) * song_percentage;
+                Player.getPlayer().seekTo(song_position);
+            }
+        });
     }
 
     public void updateButtonIcon() {
