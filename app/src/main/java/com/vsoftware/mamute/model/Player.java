@@ -19,8 +19,11 @@ public class Player {
             player.stop();
             player.reset();
 
-            player.setDataSource(context, current_song.getUri());
-            player.prepare();
+            if( current_song != null ) {
+                player.setDataSource(context, current_song.getUri());
+                player.prepare();
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
